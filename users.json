@@ -1,0 +1,36 @@
+{
+  "demo@xeonic.dev": {
+    "password_hash": "pbkdf2_sha256$200000$36d00bcda0c10534b8fa70336ee84a84$555a2b28b0afd5e1a454f42a1d724e498656ea1d8f0a47b4ee58489b20783222",
+    "plan": "starter",
+    "billing_interval": "monthly",
+    "runs_used": 0,
+    "payments": [
+      {
+        "id": "pay_demo_001",
+        "plan": "starter",
+        "amount": 9,
+        "currency": "$",
+        "billing_interval": "monthly",
+        "status": "paid",
+        "card_last4": "4242"
+      }
+    ],
+    "access_code_hash": "pbkdf2_sha256$200000$92e7d90d7e44d078665674f1c4d2488d$5ab55907728dff3d8c1b93a350354daafae059ed703dabacedfe1a49b9ef017b"
+  },
+  "replit@example.com": {
+    "password_hash": "pbkdf2_sha256$200000$26b14ba03a611e298d7df574b07f8508$6c48babf7a36645c21d0b2edc1afe718877e7305079998e3353dd6e76b071583",
+    "access_code_hash": "pbkdf2_sha256$200000$839273cbf2ec1f0e8f592a9ff7e49dc0$5caa074ac97fd61b75b88b2c6e360b8fb22f902dfa4d3b0718deee8c47e6e9c1",
+    "plan": "free",
+    "billing_interval": "monthly",
+    "runs_used": 0,
+    "payments": []
+  },
+  "better@example.com": {
+    "password_hash": "pbkdf2_sha256$200000$76794f9938c79fe8e18f072ed260c204$3b6685cc81012e859c4b3f37ceb19810fb03de31cc4e1efa84cc7291e01842f4",
+    "access_code_hash": "pbkdf2_sha256$200000$cce7c0fee8dca351c95fea16a58d3886$6ee614b307cb2edef88cc206148aebc1914efecf5a8d12149435c91b4522f449",
+    "plan": "free",
+    "billing_interval": "monthly",
+    "runs_used": 0,
+    "payments": []
+  }
+}

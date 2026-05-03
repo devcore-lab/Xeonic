@@ -1,0 +1,2310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xeonic</title>
+<style>
+:root {
+    --bg: #f6f1ea;
+    --bg-accent: #dfe8ff;
+    --panel: rgba(255, 255, 255, 0.86);
+    --panel-soft: #fbfcff;
+    --text: #111827;
+    --muted: #5f6778;
+    --line: rgba(105, 119, 149, 0.18);
+    --line-strong: rgba(105, 119, 149, 0.3);
+    --accent: #2849ff;
+    --accent-2: #ff8a4c;
+    --accent-dark: #0f172a;
+    --accent-soft: rgba(40, 73, 255, 0.11);
+    --success: #0f9f6e;
+    --shadow: 0 24px 70px rgba(15, 23, 42, 0.12);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; }
+html { color-scheme: light; }
+body {
+    font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--text);
+    background:
+        radial-gradient(circle at top left, rgba(255, 138, 76, 0.2), transparent 28%),
+        radial-gradient(circle at top right, rgba(40, 73, 255, 0.18), transparent 34%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg-accent) 100%);
+    position: relative;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+        linear-gradient(rgba(17, 24, 39, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(17, 24, 39, 0.025) 1px, transparent 1px);
+    background-size: 42px 42px;
+    mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.6), transparent 88%);
+    opacity: 0.5;
+}
+
+.shell {
+    width: min(1440px, calc(100% - 28px));
+    margin: 24px auto;
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 24px;
+    position: relative;
+    z-index: 1;
+}
+
+.sidebar {
+    position: sticky;
+    top: 28px;
+    padding: 30px;
+    border-radius: 28px;
+    background:
+        linear-gradient(180deg, rgba(17, 24, 39, 0.97) 0%, rgba(29, 39, 90, 0.96) 100%);
+    color: #e2e8f0;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px);
+    box-shadow: var(--shadow);
+}
+
+.brand {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.28em;
+    color: rgba(226, 232, 240, 0.74);
+}
+
+.hero-title {
+    margin: 22px 0 12px;
+    font-size: 32px;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    font-family: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+}
+
+.hero-copy {
+    margin: 0 0 24px;
+    line-height: 1.6;
+    color: rgba(226, 232, 240, 0.82);
+}
+.stack {
+    display: grid;
+    gap: 18px;
+}
+
+.status-chip, .plan-pill, .soft-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.status-chip, .plan-pill {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.soft-pill {
+    color: var(--accent-dark);
+    background: var(--accent-soft);
+    border: 1px solid rgba(40, 73, 255, 0.14);
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--success);
+}
+
+.content {
+    display: grid;
+    gap: 18px;
+}
+
+.panel {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    padding: 24px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(16px);
+    animation: rise 0.45s ease;
+    transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+}
+
+.panel:hover {
+    transform: translateY(-2px);
+    border-color: rgba(40, 73, 255, 0.18);
+    box-shadow: 0 28px 80px rgba(15, 23, 42, 0.14);
+}
+
+.hero-panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(300px, 0.95fr);
+    gap: 18px;
+}
+
+.hero-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+    padding: 28px;
+    background: linear-gradient(135deg, #0f172a 0%, #2849ff 60%, #1f6feb 100%);
+    color: #ffffff;
+}
+
+.hero-card::after {
+    content: "";
+    position: absolute;
+    right: -30px;
+    top: -60px;
+    width: 210px;
+    height: 210px;
+    background: radial-gradient(circle, rgba(255,255,255,0.22), transparent 60%);
+}
+
+.hero-card::before {
+    content: "";
+    position: absolute;
+    inset: auto -15% -35% auto;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 138, 76, 0.22), transparent 64%);
+    filter: blur(12px);
+}
+
+.eyebrow {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: rgba(255,255,255,0.72);
+}
+
+.hero-card h2 {
+    margin: 14px 0 12px;
+    font-size: 34px;
+    line-height: 1.02;
+    letter-spacing: -0.04em;
+    max-width: 520px;
+    font-family: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+}
+
+.hero-card p {
+    margin: 0;
+    max-width: 600px;
+    line-height: 1.65;
+    color: rgba(255,255,255,0.86);
+}
+
+.hero-metrics {
+    margin-top: 18px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.hero-metric {
+    padding: 12px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.16);
+    backdrop-filter: blur(10px);
+}
+
+.hero-metric span {
+    display: block;
+    font-size: 12px;
+    color: rgba(255,255,255,0.72);
+}
+
+.hero-metric strong {
+    display: block;
+    margin-top: 4px;
+    font-size: 22px;
+}
+
+.section-head, .toolbar, .drop-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.section-title {
+    margin: 0;
+    font-size: 22px;
+    letter-spacing: -0.03em;
+    font-family: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+}
+
+.section-copy {
+    margin: 8px 0 0;
+    color: var(--muted);
+    line-height: 1.6;
+    max-width: 760px;
+}
+
+.actions, .toolbar-actions, .field-row, .plan-grid, .metric-grid, .usage-grid, .log-list, .pill-row {
+    display: grid;
+    gap: 12px;
+}
+
+.actions, .toolbar-actions, .pill-row {
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
+    align-items: center;
+}
+
+.btn, .ghost-btn {
+    padding: 12px 16px;
+    border-radius: 12px;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease, opacity 0.18s ease;
+}
+
+.btn {
+    color: #fff;
+    background: linear-gradient(135deg, var(--accent) 0%, #1d63ff 100%);
+    border: 1px solid transparent;
+}
+
+.ghost-btn {
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid var(--line-strong);
+}
+
+.btn:hover, .ghost-btn:hover { transform: translateY(-1px); }
+.btn:disabled, .ghost-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
+
+.field-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.field {
+    display: grid;
+    gap: 8px;
+}
+
+label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+}
+
+input, select {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.96);
+    color: var(--text);
+    font: inherit;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: rgba(37, 99, 235, 0.45);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+}
+
+.status-line {
+    min-height: 20px;
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.plan-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.plan-card, .metric, .usage-card, .account-card {
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 18px;
+    background: rgba(255, 255, 255, 0.82);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 14px 30px rgba(15, 23, 42, 0.04);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.plan-card:hover, .metric:hover, .usage-card:hover, .account-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(40, 73, 255, 0.16);
+    box-shadow: 0 18px 36px rgba(15, 23, 42, 0.08);
+}
+
+.plan-card header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.plan-card .plan-badge {
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.plan-card.selected {
+    border-color: rgba(40, 73, 255, 0.34);
+    box-shadow: 0 0 0 1px rgba(40, 73, 255, 0.1), 0 14px 28px rgba(40, 73, 255, 0.12);
+}
+
+.metric-kicker, .usage-label {
+    color: var(--muted);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.plan-price, .metric-value, .usage-value {
+    margin-top: 10px;
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    font-family: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+}
+
+.metric-value, .usage-value {
+    font-size: 26px;
+}
+
+.metric-note, .subtle {
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.55;
+}
+
+.feature-list {
+    margin: 14px 0 0;
+    padding-left: 18px;
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+.usage-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.metric-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.dropzone {
+    border: 1.5px dashed rgba(40, 73, 255, 0.22);
+    border-radius: 20px;
+    padding: 24px;
+    background:
+        linear-gradient(180deg, rgba(40, 73, 255, 0.06), rgba(255, 255, 255, 0.9) 55%),
+        var(--panel-soft);
+    transition: border-color 0.18s ease, transform 0.18s ease;
+}
+
+.dropzone.active {
+    border-color: var(--accent);
+    transform: translateY(-1px);
+}
+
+.drop-title {
+    margin: 0 0 6px;
+    font-size: 22px;
+    letter-spacing: -0.02em;
+}
+
+.drop-info {
+    margin-top: 18px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+}
+
+.drop-info div {
+    background: rgba(40, 73, 255, 0.05);
+    border-radius: 12px;
+    padding: 12px;
+    border: 1px solid #e2e8f0;
+}
+
+.drop-label {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.drop-value {
+    display: block;
+    margin-top: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.muted { color: var(--muted); }
+.micro { font-size: 13px; }
+
+.progress {
+    height: 8px;
+    margin-top: 16px;
+    border-radius: 999px;
+    background: #e8eff8;
+    overflow: hidden;
+}
+
+.bar {
+    height: 100%;
+    width: 0%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #60a5fa, var(--accent));
+    transition: width 0.22s ease;
+}
+
+.tabs {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
+    gap: 8px;
+    width: fit-content;
+    padding: 4px;
+    border-radius: 14px;
+    background: var(--panel-soft);
+    border: 1px solid var(--line);
+    margin-bottom: 16px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
+}
+
+.tab {
+    padding: 10px 14px;
+    border: none;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.tab.active {
+    background: linear-gradient(180deg, #fff, #f7f9ff);
+    color: var(--text);
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
+}
+
+.preview {
+    min-height: 240px;
+    max-height: 440px;
+    overflow: auto;
+    padding: 18px;
+    border-radius: 16px;
+    border: 1px solid var(--line);
+    background: linear-gradient(180deg, rgba(248, 250, 255, 0.98), rgba(243, 246, 255, 0.94));
+    white-space: pre-wrap;
+    line-height: 1.55;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+    font-size: 13px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.75);
+}
+
+.preview-shell {
+    display: grid;
+    gap: 14px;
+}
+
+.preview-head, .insight-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: flex-start;
+    margin-bottom: 6px;
+}
+
+.preview-title {
+    margin: 0;
+    font-size: 20px;
+    font-family: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+}
+
+.preview-subtitle {
+    margin: 6px 0 0;
+    color: var(--muted);
+    line-height: 1.5;
+}
+
+.result-chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.result-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.82);
+    color: var(--text);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.insight-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.insight-card {
+    padding: 16px;
+    border-radius: 16px;
+    border: 1px solid var(--line);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(246, 248, 255, 0.96));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.65);
+}
+
+.insight-card strong {
+    display: block;
+    margin-top: 8px;
+    font-size: 24px;
+    font-family: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+}
+
+.preview-empty {
+    display: grid;
+    place-items: center;
+    min-height: 240px;
+    color: var(--muted);
+    text-align: center;
+}
+
+.log-list {
+    display: grid;
+    gap: 10px;
+}
+
+.log-item {
+    padding: 12px 14px;
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    background: var(--panel-soft);
+    font-size: 14px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.75);
+}
+
+.modal {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 18px;
+    background: rgba(15, 23, 42, 0.45);
+}
+
+.modal.open { display: flex; }
+
+.modal-card {
+    width: min(520px, 100%);
+    padding: 24px;
+    border-radius: 20px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+}
+
+.modal-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.modal-title {
+    margin: 0;
+    font-size: 26px;
+    letter-spacing: -0.03em;
+}
+
+.summary {
+    margin-bottom: 16px;
+    padding: 16px;
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    background: rgba(255, 255, 255, 0.86);
+}
+
+.hidden { display: none; }
+
+@keyframes rise {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 1080px) {
+    .shell { grid-template-columns: 1fr; }
+    .sidebar { position: static; }
+    .hero-panel { grid-template-columns: 1fr; }
+    .metric-grid, .plan-grid, .usage-grid, .field-row, .insight-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 760px) {
+    .shell { width: min(100% - 18px, 100%); margin: 12px auto; }
+    .section-head, .toolbar, .drop-head { display: block; }
+    .actions, .toolbar-actions, .pill-row { display: flex; flex-wrap: wrap; }
+    .hero-metrics, .metric-grid, .plan-grid, .usage-grid, .field-row, .insight-grid { grid-template-columns: 1fr; }
+    .hero-title { font-size: 30px; }
+    .hero-card h2 { font-size: 28px; }
+}
+
+/* Workspace redesign */
+:root {
+    --app-bg: #f7f7f2;
+    --surface: #ffffff;
+    --surface-soft: #f3f6f3;
+    --ink: #17201c;
+    --ink-soft: #53605b;
+    --hairline: #dce3dd;
+    --hairline-strong: #c8d2cb;
+    --teal: #087f73;
+    --teal-ink: #064f49;
+    --teal-soft: #dff3ef;
+    --amber: #c56b2d;
+    --amber-soft: #fff0df;
+    --danger: #b42318;
+    --radius: 8px;
+    --app-shadow: 0 18px 48px rgba(23, 32, 28, 0.08);
+}
+
+body {
+    min-height: 100vh;
+    background:
+        linear-gradient(90deg, rgba(8, 127, 115, 0.06) 1px, transparent 1px),
+        linear-gradient(rgba(8, 127, 115, 0.04) 1px, transparent 1px),
+        var(--app-bg);
+    background-size: 28px 28px;
+}
+
+body::before { display: none; }
+
+.app-frame {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 248px minmax(0, 1fr);
+    color: var(--ink);
+}
+
+.app-rail {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    padding: 18px 14px;
+    border-right: 1px solid var(--hairline);
+    background: rgba(255, 255, 255, 0.86);
+    backdrop-filter: blur(18px);
+    display: grid;
+    grid-template-rows: auto auto 1fr auto;
+    gap: 18px;
+}
+
+.rail-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 8px 14px;
+    border-bottom: 1px solid var(--hairline);
+}
+
+.brand-mark {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--teal), #2fb9a5);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    font-weight: 800;
+    box-shadow: inset 0 -10px 18px rgba(0, 0, 0, 0.14);
+}
+
+.brand-word {
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+.brand-sub {
+    color: var(--ink-soft);
+    font-size: 12px;
+    margin-top: 2px;
+}
+
+.rail-nav {
+    display: grid;
+    gap: 6px;
+}
+
+.rail-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 11px 12px;
+    border-radius: var(--radius);
+    color: var(--ink-soft);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+    border: 1px solid transparent;
+}
+
+.rail-link.active {
+    color: var(--teal-ink);
+    background: var(--teal-soft);
+    border-color: rgba(8, 127, 115, 0.16);
+}
+
+.rail-meta {
+    display: grid;
+    gap: 10px;
+    align-self: start;
+}
+
+.mini-stat {
+    padding: 12px;
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius);
+    background: var(--surface-soft);
+}
+
+.mini-label,
+.meta-label,
+.field label {
+    color: var(--ink-soft);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.mini-value {
+    display: block;
+    margin-top: 6px;
+    font-weight: 800;
+    color: var(--ink);
+}
+
+.rail-account {
+    padding: 12px;
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius);
+    background: var(--surface);
+}
+
+.app-main {
+    min-width: 0;
+    display: grid;
+    grid-template-rows: auto 1fr;
+}
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--hairline);
+    background: rgba(247, 247, 242, 0.88);
+    backdrop-filter: blur(18px);
+}
+
+.topbar h1 {
+    margin: 0;
+    font-size: 22px;
+    letter-spacing: -0.03em;
+}
+
+.topbar p {
+    margin: 4px 0 0;
+    color: var(--ink-soft);
+    font-size: 14px;
+}
+
+.topbar-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.workspace {
+    display: block;
+    padding: 18px 24px 28px;
+}
+
+.page-view {
+    display: none;
+}
+
+.page-view.active {
+    display: block;
+    animation: rise 0.24s ease;
+}
+
+.work-column,
+.inspector {
+    min-width: 0;
+    display: grid;
+    gap: 18px;
+    align-content: start;
+}
+
+.clean-layout,
+.page-grid {
+    max-width: 1180px;
+}
+
+.account-layout {
+    display: grid;
+    grid-template-columns: minmax(320px, 0.8fr) minmax(0, 1.2fr);
+    gap: 18px;
+    align-items: start;
+}
+
+.plans-page-panel {
+    max-width: 1180px;
+}
+
+.plans-toolbar {
+    margin-top: 16px;
+    display: grid;
+    grid-template-columns: minmax(180px, 240px) minmax(0, 1fr);
+    gap: 14px;
+    align-items: end;
+}
+
+.mini-plan-summary {
+    margin: 0;
+}
+
+.plans-page-panel .plan-grid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.plans-page-panel .feature-list {
+    display: block;
+}
+
+.topbar-actions.hidden-page-actions {
+    display: none;
+}
+
+.workspace-panel,
+.inspector-panel {
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius);
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: var(--app-shadow);
+}
+
+.workspace-panel {
+    padding: 18px;
+}
+
+.inspector-panel {
+    padding: 16px;
+}
+
+.panel-title-row,
+.bench-header,
+.preview-head,
+.auth-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 14px;
+}
+
+.panel-kicker {
+    color: var(--teal);
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.panel-heading {
+    margin: 6px 0 0;
+    font-size: 20px;
+    letter-spacing: -0.03em;
+}
+
+.panel-note {
+    margin: 6px 0 0;
+    color: var(--ink-soft);
+    line-height: 1.45;
+    font-size: 14px;
+}
+
+.dropzone {
+    margin-top: 16px;
+    border: 1px dashed rgba(8, 127, 115, 0.4);
+    border-radius: var(--radius);
+    padding: 18px;
+    background: linear-gradient(180deg, rgba(223, 243, 239, 0.72), rgba(255, 255, 255, 0.88));
+}
+
+.dropzone.active {
+    border-color: var(--teal);
+    transform: none;
+    box-shadow: 0 0 0 4px rgba(8, 127, 115, 0.12);
+}
+
+.drop-title {
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.pill-row,
+.toolbar-actions,
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.soft-pill,
+.status-chip,
+.plan-pill,
+.result-chip {
+    border-radius: 999px;
+    background: var(--surface-soft);
+    border: 1px solid var(--hairline);
+    color: var(--ink-soft);
+    padding: 7px 10px;
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.status-chip {
+    color: var(--teal-ink);
+    background: var(--teal-soft);
+    border-color: rgba(8, 127, 115, 0.18);
+}
+
+.drop-info,
+.usage-grid,
+.metric-grid,
+.insight-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.drop-info div,
+.usage-card,
+.metric,
+.insight-card,
+.account-card,
+.plan-card {
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius);
+    padding: 12px;
+    background: var(--surface);
+    box-shadow: none;
+}
+
+.metric-value,
+.usage-value,
+.plan-price {
+    font-family: inherit;
+    font-size: 24px;
+    letter-spacing: -0.04em;
+}
+
+.metric-note,
+.subtle,
+.section-copy,
+.preview-subtitle {
+    color: var(--ink-soft);
+}
+
+.progress {
+    background: #e7ece8;
+}
+
+.bar {
+    background: linear-gradient(90deg, var(--teal), #35b99d);
+}
+
+.btn,
+.ghost-btn,
+.tab,
+.format-select {
+    border-radius: var(--radius);
+    min-height: 40px;
+}
+
+.format-select {
+    width: auto;
+    min-width: 110px;
+    padding: 0 34px 0 12px;
+    border: 1px solid var(--hairline-strong);
+    background-color: var(--surface);
+    color: var(--ink);
+    font: inherit;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.btn {
+    background: var(--teal);
+    color: #fff;
+}
+
+.ghost-btn {
+    background: var(--surface);
+    color: var(--ink);
+    border-color: var(--hairline-strong);
+}
+
+.btn:hover,
+.ghost-btn:hover,
+.plan-card:hover,
+.metric:hover,
+.usage-card:hover,
+.account-card:hover {
+    transform: none;
+    border-color: rgba(8, 127, 115, 0.3);
+}
+
+.preview-workspace {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+}
+
+.tabs {
+    margin: 0;
+    border-radius: var(--radius);
+    background: var(--surface-soft);
+}
+
+.tab.active {
+    color: var(--teal-ink);
+    box-shadow: none;
+}
+
+.preview {
+    border-radius: var(--radius);
+    background: #fbfcf9;
+    border-color: var(--hairline);
+    min-height: 360px;
+    max-height: 520px;
+}
+
+.compare-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 12px;
+}
+
+.compare-pane {
+    min-width: 0;
+    display: grid;
+    gap: 8px;
+}
+
+.compare-label {
+    color: var(--ink-soft);
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.inspector .field-row {
+    grid-template-columns: 1fr;
+}
+
+.inspector .actions {
+    margin-top: 12px;
+}
+
+.plan-grid {
+    grid-template-columns: 1fr;
+}
+
+.plan-grid .feature-list {
+    display: none;
+}
+
+.plan-card {
+    gap: 8px;
+}
+
+.plan-card.selected {
+    border-color: rgba(8, 127, 115, 0.45);
+    box-shadow: 0 0 0 3px rgba(8, 127, 115, 0.1);
+}
+
+.status-line {
+    color: var(--ink-soft);
+}
+
+input, select {
+    border-radius: var(--radius);
+}
+
+input:focus, select:focus {
+    border-color: rgba(8, 127, 115, 0.45);
+    box-shadow: 0 0 0 4px rgba(8, 127, 115, 0.12);
+}
+
+@media (max-width: 1180px) {
+    .app-frame { grid-template-columns: 84px minmax(0, 1fr); }
+    .app-rail { padding: 14px 10px; }
+    .brand-copy,
+    .rail-link span:last-child,
+    .rail-meta,
+    .rail-account { display: none; }
+    .rail-link { justify-content: center; }
+    .account-layout { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 760px) {
+    .app-frame { display: block; }
+    .app-rail {
+        position: static;
+        height: auto;
+        display: grid;
+        grid-template-columns: 1fr;
+        overflow-x: hidden;
+        border-right: none;
+        border-bottom: 1px solid var(--hairline);
+    }
+    .rail-brand { border-bottom: none; padding-bottom: 4px; }
+    .brand-copy { display: block; min-width: 120px; }
+    .rail-nav {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .rail-link { justify-content: center; white-space: nowrap; }
+    .rail-link span:last-child { display: none; }
+    .topbar,
+    .panel-title-row,
+    .bench-header,
+    .preview-head,
+    .auth-row { display: block; }
+    .topbar-actions { margin-top: 12px; flex-wrap: wrap; }
+    .workspace { padding: 14px; }
+    .plans-toolbar { grid-template-columns: 1fr; }
+    .drop-info,
+    .usage-grid,
+    .metric-grid,
+    .insight-grid,
+    .compare-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="app-frame">
+    <aside class="app-rail">
+        <div class="rail-brand">
+            <div class="brand-mark">X</div>
+            <div class="brand-copy">
+                <div class="brand-word">Xeonic</div>
+                <div class="brand-sub">AI data cleaner</div>
+            </div>
+        </div>
+
+        <nav class="rail-nav" aria-label="Workspace">
+            <a class="rail-link active" href="#clean" data-page-link="clean"><span>Clean data</span><span>01</span></a>
+            <a class="rail-link" href="#account" data-page-link="account"><span>Account</span><span>02</span></a>
+            <a class="rail-link" href="#plans" data-page-link="plans"><span>Plans</span><span>03</span></a>
+        </nav>
+
+        <div class="rail-meta">
+            <div class="mini-stat">
+                <span class="mini-label">Session</span>
+                <span class="mini-value" id="authChip">Guest session</span>
+            </div>
+            <div class="mini-stat">
+                <span class="mini-label">Guest cap</span>
+                <span class="mini-value">500 KB</span>
+            </div>
+            <div class="mini-stat">
+                <span class="mini-label">Supported</span>
+                <span class="mini-value">TXT, JSON, EPUB, MD, HTML, CSV</span>
+            </div>
+        </div>
+
+        <div class="rail-account">
+            <div class="mini-label">Demo login</div>
+            <div class="mini-value">demo@xeonic.dev</div>
+            <div class="brand-sub">Password: demo123</div>
+        </div>
+    </aside>
+
+    <main class="app-main">
+        <header class="topbar">
+            <div>
+                <h1>Xeonic cleaning studio</h1>
+                <p>Upload, normalize, inspect, and download cleaned data from one focused workspace.</p>
+            </div>
+            <div class="topbar-actions">
+                <button class="ghost-btn" id="browseBtn">Choose file</button>
+                <button class="btn" id="processBtn">Clean data</button>
+                <select class="format-select" id="downloadFormat" aria-label="Download format">
+                    <option value="json">JSON</option>
+                    <option value="txt">TXT</option>
+                    <option value="jsonl">JSONL</option>
+                    <option value="csv">CSV</option>
+                </select>
+                <button class="ghost-btn" id="downloadBtn" disabled>Download</button>
+            </div>
+        </header>
+
+        <div class="workspace">
+            <section class="page-view active" id="page-clean" data-page="clean">
+            <div class="work-column clean-layout">
+                <section class="workspace-panel" id="cleaner">
+                    <div class="bench-header">
+                        <div>
+                            <div class="panel-kicker">Input workbench</div>
+                            <h2 class="panel-heading">Prepare a file for cleaning</h2>
+                            <p class="panel-note">The cleaner removes Gutenberg headers, license text, boilerplate, and duplicate lines, then keeps useful prose for AI workflows within your plan limit.</p>
+                        </div>
+                        <div class="pill-row">
+                            <span class="soft-pill">Plan-sized cap</span>
+                            <span class="soft-pill">Canonical dedupe</span>
+                            <span class="soft-pill">HTML cleanup</span>
+                        </div>
+                    </div>
+
+                    <div id="dropzone" class="dropzone">
+                        <div class="drop-head">
+                            <div>
+                                <p class="drop-title" id="dropTitle">Drop files here or browse</p>
+                                <p class="muted micro">Supports batches of `.txt`, `.json`, `.epub`, `.md`, `.html`, `.csv`, and `.tsv`. Each file must fit your plan limit.</p>
+                            </div>
+                        </div>
+                        <input type="file" id="fileInput" accept=".txt,.json,.epub,.md,.markdown,.html,.htm,.csv,.tsv" class="hidden" multiple>
+                        <div class="progress"><div id="progressBar" class="bar"></div></div>
+                        <div class="drop-info">
+                            <div>
+                                <span class="drop-label">File status</span>
+                                <span id="fileInfo" class="drop-value">No file selected</span>
+                            </div>
+                            <div>
+                                <span class="drop-label">Upload limit</span>
+                                <span id="planLimit" class="drop-value">500 KB guest upload</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="status-line" id="cleanStatus" style="margin-top: 14px;">Waiting for file.</div>
+                </section>
+
+                <section class="workspace-panel">
+                    <div class="preview-workspace">
+                        <div class="panel-title-row">
+                            <div>
+                                <div class="panel-kicker">Output review</div>
+                                <h2 class="panel-heading">Cleaned result and diagnostics</h2>
+                            </div>
+                            <div class="tabs">
+                                <button class="tab active" data-tab="clean">Clean Preview</button>
+                                <button class="tab" data-tab="insights">Insights</button>
+                                <button class="tab" data-tab="logs">Logs</button>
+                            </div>
+                        </div>
+                        <div id="tabContent"></div>
+                    </div>
+                </section>
+
+                <section class="workspace-panel">
+                    <div class="panel-title-row">
+                        <div>
+                            <div class="panel-kicker">Analytics snapshot</div>
+                            <h2 class="panel-heading">Cleaning performance</h2>
+                        </div>
+                    </div>
+                    <div id="metricGrid" class="metric-grid" style="margin-top: 14px;"></div>
+                </section>
+            </div>
+            </section>
+
+            <section class="page-view" id="page-account" data-page="account">
+            <div class="page-grid account-layout" id="inspector">
+                <section class="inspector-panel">
+                    <div class="auth-row">
+                        <div>
+                            <div class="panel-kicker">Account</div>
+                            <h2 class="panel-heading">Session access</h2>
+                        </div>
+                        <span class="status-chip"><span class="dot"></span><span>Live</span></span>
+                    </div>
+                    <div class="field-row" style="margin-top: 14px;">
+                        <div class="field">
+                            <label>Email</label>
+                            <input id="email" type="email" value="demo@xeonic.dev" placeholder="you@example.com">
+                        </div>
+                        <div class="field">
+                            <label>Password</label>
+                            <input id="accountPassword" type="password" value="demo123" placeholder="Choose or enter password">
+                        </div>
+                        <div class="field">
+                            <label>Access code</label>
+                            <input id="accessCode" type="password" value="xeonic" autocomplete="off" placeholder="Set on signup, reuse on login">
+                        </div>
+                    </div>
+                    <div class="actions">
+                        <button class="btn" id="loginBtn">Log in</button>
+                        <button class="ghost-btn" id="signupBtn">Sign up</button>
+                        <button class="ghost-btn" id="refreshBtn">Refresh</button>
+                        <button class="ghost-btn" id="logoutBtn">Log out</button>
+                    </div>
+                    <div class="status-line" id="authStatus" style="margin-top: 12px;">Login required before cleaning.</div>
+                </section>
+
+                <section class="inspector-panel">
+                    <div class="panel-kicker">Usage</div>
+                    <h2 class="panel-heading">Limits and billing</h2>
+                    <div id="usageGrid" class="usage-grid" style="margin-top: 14px;"></div>
+                    <div style="margin-top: 16px;">
+                        <div class="mini-label">Recent payments</div>
+                        <div id="payments" class="log-list" style="margin-top: 10px;"></div>
+                    </div>
+                </section>
+
+            </div>
+            </section>
+
+            <section class="page-view" id="page-plans" data-page="plans">
+                <section class="workspace-panel plans-page-panel" id="plans">
+                    <div class="panel-kicker">Plans</div>
+                    <h2 class="panel-heading">Plan controls</h2>
+                    <p class="panel-note">Pick a tier and billing cadence to change upload size and cleaned-response capacity. Yearly billing gives 2 months free.</p>
+                    <div class="plans-toolbar">
+                    <div class="field">
+                        <label>Billing</label>
+                        <select class="format-select" id="billingInterval">
+                            <option value="monthly">Monthly</option>
+                            <option value="yearly">Yearly</option>
+                        </select>
+                    </div>
+                    <div class="summary mini-plan-summary">
+                        <strong>Current limit</strong><br>
+                        <span id="plansCurrentLimit">Guest upload: 500 KB</span>
+                    </div>
+                    </div>
+                    <div id="planGrid" class="plan-grid" style="margin-top: 14px;"></div>
+                </section>
+            </section>
+        </div>
+    </main>
+</div>
+
+<div class="modal" id="checkoutModal">
+    <div class="modal-card">
+        <div class="modal-head">
+            <h3 class="modal-title">Simulated Checkout</h3>
+            <button class="ghost-btn" id="closeCheckout">Close</button>
+        </div>
+        <div class="summary" id="checkoutSummary"></div>
+        <div class="field" style="margin-top: 12px;">
+            <label>Billing</label>
+            <select id="checkoutInterval">
+                <option value="monthly">Monthly</option>
+                <option value="yearly">Yearly</option>
+            </select>
+        </div>
+        <div class="field">
+            <label>Cardholder</label>
+            <input id="cardName" type="text" placeholder="Alex Example">
+        </div>
+        <div class="field" style="margin-top: 12px;">
+            <label>Card number</label>
+            <input id="cardNumber" type="text" value="4242 4242 4242 4242" placeholder="4242 4242 4242 4242">
+        </div>
+        <div class="actions" style="margin-top: 16px;">
+            <button class="btn" id="payBtn">Confirm simulated payment</button>
+        </div>
+        <div class="status-line" id="checkoutStatus" style="margin-top: 12px;"></div>
+    </div>
+</div>
+
+<script>
+const GUEST_UPLOAD_BYTES = 500 * 1024;
+const GUEST_ID_KEY = "xeonicGuestId";
+const GUEST_USAGE_KEY = "xeonicGuestUsage";
+const TOKEN_KEY = "xeonicToken";
+
+const state = {
+    token: localStorage.getItem(TOKEN_KEY) || localStorage.getItem("dataPlatformToken") || "",
+    guestId: getGuestId(),
+    guestUsage: Number(localStorage.getItem(GUEST_USAGE_KEY) || "0"),
+    user: null,
+    plans: [],
+    selectedPlan: "lite",
+    billingInterval: "monthly",
+    file: null,
+    files: [],
+    batchResults: [],
+    rawPreview: "",
+    cleanedText: "",
+    cleanedLines: [],
+    aiChunks: [],
+    stats: null,
+    logs: ["Interface ready."],
+    activeTab: "clean",
+    activePage: "clean"
+};
+
+const el = {
+    pageLinks: Array.from(document.querySelectorAll("[data-page-link]")),
+    pageViews: Array.from(document.querySelectorAll(".page-view")),
+    topbarTitle: document.querySelector(".topbar h1"),
+    topbarCopy: document.querySelector(".topbar p"),
+    topbarActions: document.querySelector(".topbar-actions"),
+    authChip: document.getElementById("authChip"),
+    email: document.getElementById("email"),
+    accountPassword: document.getElementById("accountPassword"),
+    accessCode: document.getElementById("accessCode"),
+    authStatus: document.getElementById("authStatus"),
+    loginBtn: document.getElementById("loginBtn"),
+    signupBtn: document.getElementById("signupBtn"),
+    refreshBtn: document.getElementById("refreshBtn"),
+    logoutBtn: document.getElementById("logoutBtn"),
+    billingInterval: document.getElementById("billingInterval"),
+    planGrid: document.getElementById("planGrid"),
+    usageGrid: document.getElementById("usageGrid"),
+    payments: document.getElementById("payments"),
+    dropzone: document.getElementById("dropzone"),
+    dropTitle: document.getElementById("dropTitle"),
+    fileInput: document.getElementById("fileInput"),
+    browseBtn: document.getElementById("browseBtn"),
+    processBtn: document.getElementById("processBtn"),
+    progressBar: document.getElementById("progressBar"),
+    cleanStatus: document.getElementById("cleanStatus"),
+    metricGrid: document.getElementById("metricGrid"),
+    tabContent: document.getElementById("tabContent"),
+    fileInfo: document.getElementById("fileInfo"),
+    planLimit: document.getElementById("planLimit"),
+    plansCurrentLimit: document.getElementById("plansCurrentLimit"),
+    tabs: Array.from(document.querySelectorAll(".tab")),
+    downloadFormat: document.getElementById("downloadFormat"),
+    downloadBtn: document.getElementById("downloadBtn"),
+    checkoutModal: document.getElementById("checkoutModal"),
+    checkoutSummary: document.getElementById("checkoutSummary"),
+    checkoutInterval: document.getElementById("checkoutInterval"),
+    cardName: document.getElementById("cardName"),
+    cardNumber: document.getElementById("cardNumber"),
+    payBtn: document.getElementById("payBtn"),
+    checkoutStatus: document.getElementById("checkoutStatus"),
+    closeCheckout: document.getElementById("closeCheckout")
+};
+
+init();
+
+async function init() {
+    bindEvents();
+    const initialPage = (window.location.hash || "#clean").replace("#", "");
+    setPage(["clean", "account", "plans"].includes(initialPage) ? initialPage : "clean", false);
+    if (window.location.protocol === "file:") {
+        const message = "Open through the Node server to clean files: npm start";
+        el.authStatus.textContent = message;
+        el.cleanStatus.textContent = message;
+    }
+    await loadPlans();
+    renderMetrics();
+    renderTab();
+    if (state.token) {
+        await fetchMe();
+    } else {
+        renderAccount();
+        renderUsage();
+        el.authStatus.textContent = "Guest mode includes 1 free clean. Log in for unlimited cleaning.";
+    }
+}
+
+function bindEvents() {
+    el.pageLinks.forEach((link) => {
+        link.addEventListener("click", (event) => {
+            event.preventDefault();
+            setPage(link.dataset.pageLink);
+        });
+    });
+    el.loginBtn.addEventListener("click", () => authenticate("login"));
+    el.signupBtn.addEventListener("click", () => authenticate("signup"));
+    el.refreshBtn.addEventListener("click", fetchMe);
+    el.logoutBtn.addEventListener("click", logout);
+    el.browseBtn.addEventListener("click", () => el.fileInput.click());
+    el.fileInput.addEventListener("change", () => setFiles(Array.from(el.fileInput.files || [])));
+    el.processBtn.addEventListener("click", processFile);
+    el.downloadBtn.addEventListener("click", downloadCleaned);
+    el.closeCheckout.addEventListener("click", closeCheckout);
+    el.payBtn.addEventListener("click", submitCheckout);
+    el.billingInterval.addEventListener("change", () => {
+        state.billingInterval = el.billingInterval.value;
+        renderPlans();
+    });
+    el.checkoutInterval.addEventListener("change", () => {
+        state.billingInterval = el.checkoutInterval.value;
+        el.billingInterval.value = state.billingInterval;
+        renderPlans();
+        renderCheckoutSummary();
+    });
+
+    el.tabs.forEach((button) => {
+        button.addEventListener("click", () => {
+            state.activeTab = button.dataset.tab;
+            el.tabs.forEach((tab) => tab.classList.toggle("active", tab === button));
+            renderTab();
+        });
+    });
+
+    ["dragenter", "dragover"].forEach((eventName) => {
+        el.dropzone.addEventListener(eventName, (event) => {
+            event.preventDefault();
+            el.dropzone.classList.add("active");
+        });
+    });
+
+    ["dragleave", "drop"].forEach((eventName) => {
+        el.dropzone.addEventListener(eventName, (event) => {
+            event.preventDefault();
+            el.dropzone.classList.remove("active");
+        });
+    });
+
+    el.dropzone.addEventListener("drop", (event) => {
+        setFiles(Array.from(event.dataTransfer.files || []));
+    });
+}
+
+async function loadPlans() {
+    const data = await api("/plans", { method: "GET" }, false);
+    state.plans = data.plans || [];
+    renderPlans();
+}
+
+function setPage(page, updateHash = true) {
+    state.activePage = page;
+    el.pageViews.forEach((view) => view.classList.toggle("active", view.dataset.page === page));
+    el.pageLinks.forEach((link) => link.classList.toggle("active", link.dataset.pageLink === page));
+    const copy = {
+        clean: ["Data filtering", "Upload files, clean useful AI text, review diagnostics, and export the result."],
+        account: ["Account access", "Create accounts, log in, and check usage without crowding the cleaning workspace."],
+        plans: ["Plans and limits", "Choose monthly or yearly billing and set the upload size that fits your workflow."]
+    };
+    el.topbarTitle.textContent = copy[page][0];
+    el.topbarCopy.textContent = copy[page][1];
+    el.topbarActions.classList.toggle("hidden-page-actions", page !== "clean");
+    if (updateHash) {
+        history.replaceState(null, "", `#${page}`);
+    }
+}
+
+async function authenticate(mode) {
+    const email = el.email.value.trim();
+    const code = el.accessCode.value;
+    const password = el.accountPassword.value;
+    const isSignup = mode === "signup";
+    el.authStatus.textContent = isSignup ? "Creating account..." : "Logging in...";
+
+    try {
+        const data = await api(isSignup ? "/auth/register" : "/auth/login", {
+            method: "POST",
+            body: JSON.stringify({ email, code, password })
+        }, false);
+
+        state.token = data.token;
+        localStorage.setItem(TOKEN_KEY, state.token);
+        state.user = data.user;
+        syncBillingFromUser();
+        el.authStatus.textContent = `Signed in as ${state.user.email}.`;
+        renderAccount();
+        renderUsage();
+        renderPlans();
+        log(isSignup ? "Account created." : "Authentication succeeded.");
+    } catch (error) {
+        el.authStatus.textContent = error.message;
+        log(isSignup ? "Signup failed." : "Authentication failed.");
+    }
+}
+
+async function fetchMe() {
+    if (!state.token) {
+        renderAccount();
+        return;
+    }
+
+    try {
+        const data = await api("/me", { method: "GET" });
+        state.user = data.user;
+        syncBillingFromUser();
+        el.authStatus.textContent = `Signed in as ${state.user.email}.`;
+        renderAccount();
+        renderUsage();
+        renderPlans();
+        log("Account refreshed.");
+    } catch (error) {
+        state.token = "";
+        state.user = null;
+        localStorage.removeItem(TOKEN_KEY);
+        localStorage.removeItem("dataPlatformToken");
+        el.authStatus.textContent = error.message;
+        renderAccount();
+        renderUsage();
+    }
+}
+
+function logout() {
+    state.token = "";
+    state.user = null;
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem("dataPlatformToken");
+    el.authStatus.textContent = "Logged out. Guest mode includes 1 free clean.";
+    renderAccount();
+    renderUsage();
+    renderPlans();
+    log("Logged out.");
+}
+
+function syncBillingFromUser() {
+    if (!state.user) {
+        return;
+    }
+    state.billingInterval = state.user.billing_interval || "monthly";
+    el.billingInterval.value = state.billingInterval;
+    el.checkoutInterval.value = state.billingInterval;
+}
+
+function currentMessageLimit() {
+    return state.user ? state.user.usage.message_limit_bytes || state.user.usage.max_bytes : GUEST_UPLOAD_BYTES;
+}
+
+function renderAccount() {
+    if (!state.user) {
+        el.authChip.textContent = "Guest session";
+        return;
+    }
+    el.authChip.textContent = `${state.user.plan_name} plan`;
+}
+
+function renderPlans() {
+    el.planGrid.innerHTML = state.plans.map((plan) => {
+        const userInterval = state.user ? state.user.billing_interval || "monthly" : state.billingInterval;
+        const selected = state.user
+            ? state.user.plan_id === plan.id && userInterval === state.billingInterval
+            : state.selectedPlan === plan.id;
+        const price = formatPlanPrice(plan, state.billingInterval);
+        const cadenceNote = plan.price && state.billingInterval === "yearly"
+            ? `$${plan.price}/mo billed yearly`
+            : "Monthly billing available";
+        const runs = "Unlimited logged-in runs";
+        const sizeLimit = formatBytes(plan.max_bytes);
+        const messageLimit = formatBytes(plan.message_limit_bytes || plan.max_bytes);
+        const actionLabel = selected ? "Selected" : plan.price ? "Choose" : "Switch";
+        return `
+            <article class="plan-card ${selected ? "selected" : ""}">
+                <div class="metric-kicker">${plan.name}</div>
+                <div class="plan-price">${price}</div>
+                <div class="subtle">${plan.price ? cadenceNote : "No payment required"}</div>
+                <div class="subtle">${runs} • ${sizeLimit} upload • ${messageLimit} response</div>
+                <ul class="feature-list">${plan.features.map((feature) => `<li>${feature}</li>`).join("")}</ul>
+                <div class="actions" style="margin-top: 16px;">
+                    <button class="btn" ${selected ? "disabled" : `onclick="openCheckout('${plan.id}')"`}>${actionLabel}</button>
+                </div>
+            </article>
+        `;
+    }).join("");
+}
+
+function renderUsage() {
+    if (!state.user) {
+        const remaining = Math.max(0, 1 - state.guestUsage);
+        el.usageGrid.innerHTML = `
+            <div class="usage-card"><div class="usage-label">Guest runs used</div><div class="usage-value">${state.guestUsage}</div></div>
+            <div class="usage-card"><div class="usage-label">Guest runs left</div><div class="usage-value">${remaining}</div></div>
+            <div class="usage-card"><div class="usage-label">Current plan</div><div class="usage-value">Guest</div></div>
+            <div class="usage-card"><div class="usage-label">Upload limit</div><div class="usage-value">${formatBytes(GUEST_UPLOAD_BYTES)}</div></div>
+            <div class="usage-card"><div class="usage-label">Response cap</div><div class="usage-value">${formatBytes(GUEST_UPLOAD_BYTES)}</div></div>
+        `;
+        el.payments.innerHTML = `<div class="log-item">Guest mode includes 1 free clean. Sign up with any email and password for unlimited cleaning.</div>`;
+        el.planLimit.textContent = `${formatBytes(GUEST_UPLOAD_BYTES)} guest upload/response`;
+        el.plansCurrentLimit.textContent = `Guest upload and response: ${formatBytes(GUEST_UPLOAD_BYTES)}`;
+        return;
+    }
+
+    const usage = state.user.usage;
+    const uploadLimit = usage.max_bytes;
+    const responseLimit = usage.message_limit_bytes || uploadLimit;
+    el.usageGrid.innerHTML = `
+        <div class="usage-card"><div class="usage-label">Runs used</div><div class="usage-value">${usage.runs_used}</div></div>
+        <div class="usage-card"><div class="usage-label">Runs remaining</div><div class="usage-value">${usage.runs_remaining}</div></div>
+        <div class="usage-card"><div class="usage-label">Current plan</div><div class="usage-value">${state.user.plan_name}</div></div>
+        <div class="usage-card"><div class="usage-label">Billing</div><div class="usage-value">${titleCase(state.user.billing_interval || "monthly")}</div></div>
+        <div class="usage-card"><div class="usage-label">Upload limit</div><div class="usage-value">${formatBytes(uploadLimit)}</div></div>
+        <div class="usage-card"><div class="usage-label">Response cap</div><div class="usage-value">${formatBytes(responseLimit)}</div></div>
+    `;
+    el.planLimit.textContent = `${formatBytes(uploadLimit)} upload / ${formatBytes(responseLimit)} response`;
+    el.plansCurrentLimit.textContent = `${state.user.plan_name}: ${formatBytes(uploadLimit)} upload / ${formatBytes(responseLimit)} response`;
+
+    const payments = state.user.payments || [];
+    el.payments.innerHTML = payments.length
+        ? payments.map((payment) => `
+            <div class="log-item">
+                ${payment.id} • ${titleCase(payment.plan)} • ${formatPaymentAmount(payment)} • ${titleCase(payment.billing_interval || "monthly")}${payment.card_last4 ? ` • card ending ${payment.card_last4}` : ""}
+            </div>
+        `).join("")
+        : `<div class="log-item">No payments yet for this account.</div>`;
+}
+
+function setFiles(files) {
+    const allowed = [".txt", ".json", ".epub", ".md", ".markdown", ".html", ".htm", ".csv", ".tsv"];
+    const selected = files.filter(Boolean);
+    const invalid = selected.find((file) => !allowed.some((ext) => file.name.toLowerCase().endsWith(ext)));
+    if (invalid) {
+        state.file = null;
+        state.files = [];
+        state.rawPreview = "";
+        el.fileInput.value = "";
+        el.dropTitle.textContent = "Drop files here or browse";
+        el.cleanStatus.textContent = "Supported files: .txt, .json, .epub, .md, .html, .csv, and .tsv.";
+        log("Unsupported file rejected.");
+        return;
+    }
+    const uploadLimit = state.user ? state.user.usage.max_bytes : GUEST_UPLOAD_BYTES;
+    const oversized = selected.find((file) => file.size > uploadLimit);
+    if (oversized) {
+        state.file = null;
+        state.files = [];
+        state.rawPreview = "";
+        el.fileInput.value = "";
+        el.dropTitle.textContent = "Drop files here or browse";
+        el.cleanStatus.textContent = `Files must be ${formatBytes(uploadLimit)} or smaller.`;
+        el.fileInfo.textContent = `${oversized.name} • ${formatBytes(oversized.size)} rejected`;
+        log("Oversized file rejected.");
+        return;
+    }
+
+    state.files = selected;
+    state.file = selected[0] || null;
+    state.batchResults = [];
+    state.cleanedText = "";
+    state.cleanedLines = [];
+    state.aiChunks = [];
+    state.stats = null;
+    state.rawPreview = "";
+    const totalSize = selected.reduce((sum, file) => sum + file.size, 0);
+    el.dropTitle.textContent = selected.length
+        ? `Selected: ${selected.length} file${selected.length === 1 ? "" : "s"}`
+        : "Drop files here or browse";
+    el.cleanStatus.textContent = selected.length
+        ? `${selected.length} file${selected.length === 1 ? "" : "s"} ready to clean.`
+        : "Waiting for file.";
+    el.fileInfo.textContent = selected.length
+        ? `${selected.length} file${selected.length === 1 ? "" : "s"} • ${formatBytes(totalSize)} total`
+        : "No file selected";
+    if (state.file) {
+        renderMetrics();
+        renderTab();
+        loadRawPreview(state.file);
+        log(selected.length === 1 ? "File selected." : "Batch selected.");
+    }
+}
+
+function setFile(file) {
+    setFiles(file ? [file] : []);
+}
+
+function loadRawPreview(file) {
+    const previewable = [".txt", ".json", ".md", ".markdown", ".html", ".htm", ".csv", ".tsv"]
+        .some((ext) => file.name.toLowerCase().endsWith(ext));
+    if (!previewable) {
+        state.rawPreview = "EPUB selected. Source preview is generated on the server during cleaning.";
+        renderTab();
+        return;
+    }
+
+    file.text()
+        .then((text) => {
+            state.rawPreview = text.slice(0, 5000);
+            renderTab();
+        })
+        .catch(() => {
+            state.rawPreview = "Source preview unavailable for this file.";
+            renderTab();
+        });
+}
+
+async function processFile() {
+    if (!state.token && state.guestUsage >= 1) {
+        el.cleanStatus.textContent = "Guest limit reached. Log in for unlimited cleaning.";
+        return;
+    }
+    if (!state.files.length) {
+        el.cleanStatus.textContent = "Choose one or more files first.";
+        return;
+    }
+    const uploadLimit = state.user ? state.user.usage.max_bytes : GUEST_UPLOAD_BYTES;
+    const oversized = state.files.find((file) => file.size > uploadLimit);
+    if (oversized) {
+        el.cleanStatus.textContent = `Files must be ${formatBytes(uploadLimit)} or smaller.`;
+        return;
+    }
+
+    const form = new FormData();
+    if (state.files.length > 1) {
+        state.files.forEach((file) => form.append("files", file));
+    } else {
+        form.append("file", state.files[0]);
+    }
+
+    try {
+        setProgress(16);
+        el.cleanStatus.textContent = `Uploading ${state.files.length} file${state.files.length === 1 ? "" : "s"}...`;
+        const headers = state.token
+            ? { "X-Session-Token": state.token }
+            : { "X-Guest-Id": state.guestId };
+        const response = await fetch(state.files.length > 1 ? "/clean-batch" : "/clean", {
+            method: "POST",
+            headers,
+            body: form
+        });
+        setProgress(62);
+        const data = await parseResponse(response);
+        const batchFiles = Array.isArray(data.files) ? data.files : [];
+        state.batchResults = batchFiles;
+        state.cleanedText = data.cleaned_text || "";
+        state.cleanedLines = Array.isArray(data.cleaned_lines)
+            ? data.cleaned_lines
+            : state.cleanedText.split(/\r?\n/).filter((line) => line.trim());
+        state.aiChunks = Array.isArray(data.ai_chunks) ? data.ai_chunks : [];
+        state.stats = data.stats || null;
+        state.user = data.user || state.user;
+        if (!state.user && data.usage) {
+            state.guestUsage = data.usage.runs_used || state.guestUsage;
+            localStorage.setItem(GUEST_USAGE_KEY, String(state.guestUsage));
+        }
+        el.cleanStatus.textContent = state.files.length > 1
+            ? `Batch complete: ${state.files.length} files cleaned.`
+            : "Processing complete.";
+        setProgress(100);
+        el.downloadBtn.disabled = !state.cleanedText;
+        renderMetrics();
+        renderUsage();
+        renderTab();
+        log(state.files.length > 1 ? "Batch cleaning completed." : "Cleaning completed.");
+    } catch (error) {
+        setProgress(0);
+        el.cleanStatus.textContent = error.message;
+        log("Cleaning failed.");
+    }
+}
+
+function renderMetrics() {
+    const stats = state.stats || {
+        original_lines: 0,
+        cleaned_lines: 0,
+        quality_score: 0,
+        reduction_percent: 0,
+        duplicate_ratio: 0,
+        boilerplate_ratio: 0,
+        avg_line_length: 0,
+        avg_words_per_line: 0,
+        junk_chars_removed: 0,
+        removed_lines: 0,
+        discarded_boilerplate_lines: 0,
+        discarded_ai_noise_lines: 0,
+        discarded_short_lines: 0,
+        output_truncated: false,
+        ai_token_count: 0,
+        ai_chunk_count: 0,
+        ai_chunk_tokens: 800,
+        ai_chunk_overlap: 80,
+        message_limit_bytes: currentMessageLimit()
+    };
+
+    const cards = [
+        ["Quality score", `${stats.quality_score || 0}/100`, "Composite score from duplicates, density, boilerplate, and cleanup ratio."],
+        ["Reduction", `${formatNumber(stats.reduction_percent || 0)}%`, "Share of original lines removed during purification."],
+        ["Duplicate ratio", `${formatNumber(stats.duplicate_ratio || 0)}%`, "How much duplicate content appeared in the source."],
+        ["Boilerplate", `${formatNumber(stats.boilerplate_ratio || 0)}%`, "Page numbers, headers, and other low-value content removed."],
+        ["Average line length", formatNumber(stats.avg_line_length || 0), "Average characters per surviving line."],
+        ["Average words", formatNumber(stats.avg_words_per_line || 0), "Average words per cleaned line after normalization."],
+        ["Original size", formatBytes(stats.original_size || 0), "Raw uploaded size in bytes."],
+        ["Cleaned size", formatBytes(stats.cleaned_size || 0), "Purified output size in bytes."],
+        ["AI tokens", `${stats.ai_token_count || 0}`, "Token count for downstream AI chunking."],
+        ["AI chunks", `${stats.ai_chunk_count || 0}`, `${stats.ai_chunk_tokens || 800} tokens with ${stats.ai_chunk_overlap || 80} overlap.`],
+        ["Response cap", formatBytes(stats.message_limit_bytes || currentMessageLimit()), stats.output_truncated ? "Output was trimmed to fit the plan response limit." : "Maximum response payload for cleaned text on this plan."],
+        ["Removed lines", `${stats.removed_lines || 0}`, "All lines filtered out for shortness, emptiness, or duplication."],
+        ["Boilerplate lines", `${stats.discarded_boilerplate_lines || 0}`, "Low-value content stripped before dedupe."],
+        ["AI noise lines", `${stats.discarded_ai_noise_lines || 0}`, "TOC entries, captions, notes, labels, and fragments removed."],
+        ["Junk chars removed", `${stats.junk_chars_removed || 0}`, "Non-useful characters stripped during normalization."]
+    ];
+
+    el.metricGrid.innerHTML = cards.map(([label, value, note]) => `
+        <div class="metric">
+            <div class="metric-kicker">${label}</div>
+            <div class="metric-value">${value}</div>
+            <div class="metric-note">${note}</div>
+        </div>
+    `).join("");
+}
+
+function renderTab() {
+    if (state.activeTab === "clean") {
+        const stats = state.stats || {};
+        const hasOutput = Boolean(state.cleanedText);
+        const sourcePreview = state.rawPreview || "Choose files to preview the first source sample.";
+        const cleanedPreview = state.cleanedText || "No cleaned output yet.";
+        const outputTitle = hasOutput
+            ? (state.batchResults.length ? `${state.batchResults.length} cleaned files` : escapeHtml(state.file ? state.file.name : "Cleaned output"))
+            : "No cleaned output yet.";
+        el.tabContent.innerHTML = `
+            <div class="preview-shell">
+                <div class="preview-head">
+                    <div>
+                        <h4 class="preview-title">${outputTitle}</h4>
+                        <p class="preview-subtitle">${hasOutput ? (stats.output_truncated ? `Review the cleaned text below. The output was trimmed to the ${formatBytes(stats.message_limit_bytes || currentMessageLimit())} plan response limit.` : "Review the cleaned text below and download it when you’re happy with the result.") : "Choose one or more files and run the cleaner to see transformed output here."}</p>
+                    </div>
+                    <div class="result-chip-row">
+                        <span class="result-chip">${stats.cleaned_lines || 0} kept</span>
+                        <span class="result-chip">${stats.duplicates_removed || 0} duplicates removed</span>
+                        <span class="result-chip">${stats.discarded_boilerplate_lines || 0} boilerplate stripped</span>
+                        <span class="result-chip">${stats.discarded_ai_noise_lines || 0} AI-noise removed</span>
+                    </div>
+                </div>
+                <div class="compare-grid">
+                    <div class="compare-pane">
+                        <div class="compare-label">Source sample</div>
+                        <div class="preview ${state.rawPreview ? "" : "preview-empty"}">${escapeHtml(sourcePreview)}</div>
+                    </div>
+                    <div class="compare-pane">
+                        <div class="compare-label">Cleaned output</div>
+                        <div class="preview ${hasOutput ? "" : "preview-empty"}">${escapeHtml(cleanedPreview)}</div>
+                    </div>
+                </div>
+            </div>
+        `;
+        return;
+    }
+
+    if (state.activeTab === "insights") {
+        const stats = state.stats || {};
+        el.tabContent.innerHTML = `
+            <div class="preview-shell">
+                <div class="insight-head">
+                    <div>
+                        <h4 class="preview-title">Cleanup insights</h4>
+                        <p class="preview-subtitle">This view summarizes how aggressively the cleaner transformed the file and what was removed along the way.</p>
+                    </div>
+                </div>
+                <div class="insight-grid">
+                    <div class="insight-card">
+                        <div class="metric-kicker">Source size</div>
+                        <strong>${formatBytes(stats.original_size || 0)}</strong>
+                        <div class="metric-note">Raw size before normalization.</div>
+                    </div>
+                    <div class="insight-card">
+                        <div class="metric-kicker">Cleaned size</div>
+                        <strong>${formatBytes(stats.cleaned_size || 0)}</strong>
+                        <div class="metric-note">Output size after cleanup.</div>
+                    </div>
+                    <div class="insight-card">
+                        <div class="metric-kicker">Removed lines</div>
+                        <strong>${stats.removed_lines || 0}</strong>
+                        <div class="metric-note">Lines filtered as empty, short, duplicate, or boilerplate.</div>
+                    </div>
+                    <div class="insight-card">
+                        <div class="metric-kicker">Quality score</div>
+                        <strong>${stats.quality_score || 0}/100</strong>
+                        <div class="metric-note">Higher scores mean cleaner, denser output.</div>
+                    </div>
+                    <div class="insight-card">
+                        <div class="metric-kicker">Words per line</div>
+                        <strong>${formatNumber(stats.avg_words_per_line || 0)}</strong>
+                        <div class="metric-note">Average words kept in each surviving line.</div>
+                    </div>
+                    <div class="insight-card">
+                        <div class="metric-kicker">Account state</div>
+                        <strong>${state.user ? state.user.plan_name : "Guest"}</strong>
+                        <div class="metric-note">Runs remaining: ${state.user ? state.user.usage.runs_remaining : "-"}</div>
+                    </div>
+                    <div class="insight-card">
+                        <div class="metric-kicker">Response cap</div>
+                        <strong>${formatBytes(stats.message_limit_bytes || currentMessageLimit())}</strong>
+                        <div class="metric-note">${stats.output_truncated ? "Cleaned text was trimmed to fit the cap." : "Cleaned response fit inside the cap."}</div>
+                    </div>
+                </div>
+            </div>
+        `;
+        return;
+    }
+
+    el.tabContent.innerHTML = `
+        <div class="log-list">
+            ${state.logs.slice().reverse().map((entry) => `<div class="log-item">${escapeHtml(entry)}</div>`).join("")}
+        </div>
+    `;
+}
+
+function openCheckout(planId) {
+    if (!state.token) {
+        el.authStatus.textContent = "Please log in before choosing a paid plan.";
+        return;
+    }
+
+    state.selectedPlan = planId;
+    el.checkoutInterval.value = state.billingInterval;
+    renderCheckoutSummary();
+    el.checkoutStatus.textContent = "";
+    el.checkoutModal.classList.add("open");
+}
+
+function renderCheckoutSummary() {
+    const plan = state.plans.find((item) => item.id === state.selectedPlan);
+    if (!plan) {
+        return;
+    }
+    const interval = state.billingInterval;
+    const paidLine = plan.price
+        ? `${formatPlanPrice(plan, interval)} ${interval === "yearly" ? "(2 months free)" : ""}`
+        : "Free plan";
+    el.checkoutSummary.innerHTML = `
+        <strong>${plan.name}</strong><br>
+        ${paidLine}<br>
+        ${plan.runs === 999 ? "Unlimited cleaning runs" : `${plan.runs} cleaning runs`}<br>
+        ${formatBytes(plan.max_bytes)} max per upload
+    `;
+}
+
+function closeCheckout() {
+    el.checkoutModal.classList.remove("open");
+}
+
+async function submitCheckout() {
+    try {
+        el.checkoutStatus.textContent = "Processing simulated payment...";
+        const data = await api("/checkout", {
+            method: "POST",
+            body: JSON.stringify({
+                plan_id: state.selectedPlan,
+                billing_interval: state.billingInterval,
+                card_name: el.cardName.value.trim(),
+                card_number: el.cardNumber.value.trim()
+            })
+        });
+
+        state.user = data.user;
+        syncBillingFromUser();
+        el.checkoutStatus.textContent = data.message;
+        renderAccount();
+        renderUsage();
+        renderPlans();
+        log("Plan updated.");
+        setTimeout(closeCheckout, 700);
+    } catch (error) {
+        el.checkoutStatus.textContent = error.message;
+        log("Checkout failed.");
+    }
+}
+
+function downloadCleaned() {
+    if (!state.cleanedText) {
+        return;
+    }
+    const format = el.downloadFormat ? el.downloadFormat.value : "json";
+    const isBatch = state.batchResults.length > 0;
+    const sourceName = isBatch ? "batch" : (state.file ? state.file.name : "data");
+    const baseName = sourceName.replace(/\.[^.]+$/, "") || "data";
+    const cleanedLines = state.cleanedLines.length
+        ? state.cleanedLines
+        : state.cleanedText.split(/\r?\n/).filter((line) => line.trim());
+    const exportObject = {
+            source_file: sourceName,
+            files: state.batchResults,
+            cleaned_at: new Date().toISOString(),
+            cleaned_text: state.cleanedText,
+            cleaned_lines: cleanedLines,
+            ai_chunks: state.aiChunks,
+            stats: state.stats || {},
+            message_limit_bytes: state.stats?.message_limit_bytes || currentMessageLimit()
+        };
+    let payload = state.cleanedText;
+    let mimeType = "text/plain;charset=utf-8";
+    if (format === "json") {
+        payload = JSON.stringify(exportObject, null, 2);
+        mimeType = "application/json;charset=utf-8";
+    } else if (format === "jsonl") {
+        const chunks = state.aiChunks.length
+            ? state.aiChunks
+            : [{ chunk_index: 0, token_count: cleanedLines.join(" ").split(/\s+/).filter(Boolean).length, text: state.cleanedText }];
+        payload = chunks.map((chunk) => JSON.stringify({
+            source_file: chunk.source_file || sourceName,
+            cleaned_at: exportObject.cleaned_at,
+            ...chunk
+        })).join("\n") + "\n";
+        mimeType = "application/x-ndjson;charset=utf-8";
+    } else if (format === "csv") {
+        const chunks = state.aiChunks.length
+            ? state.aiChunks
+            : [{ chunk_index: 0, token_count: cleanedLines.join(" ").split(/\s+/).filter(Boolean).length, text: state.cleanedText }];
+        payload = [
+            ["source_file", "chunk_id", "chunk_index", "start_token", "end_token", "token_count", "text"].join(","),
+            ...chunks.map((chunk) => [
+                csvCell(chunk.source_file || sourceName),
+                csvCell(chunk.chunk_id || `chunk-${chunk.chunk_index || 0}`),
+                chunk.chunk_index,
+                chunk.start_token || 0,
+                chunk.end_token || chunk.token_count || 0,
+                chunk.token_count,
+                csvCell(chunk.text || "")
+            ].join(","))
+        ].join("\n") + "\n";
+        mimeType = "text/csv;charset=utf-8";
+    }
+    const blob = new Blob([payload], {
+        type: mimeType
+    });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = `cleaned-${baseName}.${format}`;
+    anchor.click();
+    URL.revokeObjectURL(url);
+    log(`Downloaded cleaned data as ${format.toUpperCase()}.`);
+}
+
+async function api(path, options = {}, includeAuth = true) {
+    const headers = { "Content-Type": "application/json", ...(options.headers || {}) };
+    if (includeAuth && state.token) {
+        headers["X-Session-Token"] = state.token;
+    }
+    let response;
+    try {
+        response = await fetch(path, { ...options, headers });
+    } catch (error) {
+        if (window.location.protocol === "file:") {
+            throw new Error("This page is open as a file. Run `npm start` and open http://127.0.0.1:8000.");
+        }
+        throw error;
+    }
+    return parseResponse(response);
+}
+
+async function parseResponse(response) {
+    let data = {};
+    try {
+        data = await response.json();
+    } catch (error) {
+        data = {};
+    }
+    if (!response.ok) {
+        throw new Error(data.detail || data.error || "Request failed.");
+    }
+    return data;
+}
+
+function setProgress(value) {
+    el.progressBar.style.width = `${value}%`;
+}
+
+function log(message) {
+    state.logs.push(`${new Date().toLocaleTimeString()} - ${message}`);
+    if (state.logs.length > 40) {
+        state.logs = state.logs.slice(-40);
+    }
+    renderTab();
+}
+
+function formatBytes(bytes) {
+    if (!bytes) {
+        return "0 B";
+    }
+    const units = ["B", "KB", "MB", "GB"];
+    let size = bytes;
+    let unit = 0;
+    while (size >= 1024 && unit < units.length - 1) {
+        size /= 1024;
+        unit += 1;
+    }
+    return `${size.toFixed(1)} ${units[unit]}`;
+}
+
+function formatNumber(value) {
+    return Number(value).toFixed(2).replace(/\.00$/, "");
+}
+
+function formatPlanPrice(plan, interval = state.billingInterval) {
+    if (!plan.price) {
+        return "Free";
+    }
+    if (interval === "yearly") {
+        return `$${plan.yearly_price}/yr`;
+    }
+    return `$${plan.price}/mo`;
+}
+
+function formatPaymentAmount(payment) {
+    if (!payment.amount) {
+        return "Free";
+    }
+    const currency = payment.currency || "$";
+    const suffix = payment.billing_interval === "yearly" ? "/yr" : "/mo";
+    return `${currency}${payment.amount}${suffix}`;
+}
+
+function titleCase(value) {
+    return value.charAt(0).toUpperCase() + value.slice(1);
+}
+
+function csvCell(value) {
+    return `"${String(value).replace(/"/g, '""')}"`;
+}
+
+function getGuestId() {
+    let guestId = localStorage.getItem(GUEST_ID_KEY);
+    if (!guestId) {
+        const randomPart = crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`;
+        guestId = `guest-${randomPart}`;
+        localStorage.setItem(GUEST_ID_KEY, guestId);
+    }
+    return guestId;
+}
+
+function escapeHtml(text) {
+    return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+}
+</script>
+</body>
+</html>
