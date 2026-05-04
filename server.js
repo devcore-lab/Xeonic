@@ -14,7 +14,7 @@ const DB_PATH = path.join(__dirname, "xeonic.db");
 const AI_CHUNK_TOKENS = 800;
 const AI_CHUNK_OVERLAP = 80;
 const SUPPORTED_EXTENSIONS = [".txt", ".json", ".epub", ".md", ".markdown", ".html", ".htm", ".csv", ".tsv"];
-const LOGIN_EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+const MAX_ACCOUNT_ID_LENGTH = 120;
 const TOKEN_RE = /[A-Za-z0-9]+(?:['.-][A-Za-z0-9]+)*|[^\w\s]/gu;
 const SESSIONS = new Map();
 const GUEST_RUNS = new Map();
@@ -78,29 +78,29 @@ app.get("/health", (_req, res) => res.json({
 }));
 
 app.post("/auth/login", (req, res) => {
-  const email = String(req.body.email || "").trim().toLowerCase();
-  if (!LOGIN_EMAIL_RE.test(email)) return error(res, 400, "Enter a valid email address.");
-  const user = getUser(email);
+  const accountId = normalizeAccountId(req.body.email);
+  if (!accountId) return error(res, 400, "Enter your username or email.");
+  const user = getUser(accountId);
   if (!user) return error(res, 404, "Account not found. Sign up first.");
   if (!verifySecret(String(req.body.password || ""), user.password_hash)) return error(res, 401, "Password is incorrect.");
   if (!verifySecret(String(req.body.code || ""), user.access_code_hash)) return error(res, 401, "Access code is incorrect for this account.");
   const token = crypto.randomBytes(16).toString("hex");
-  SESSIONS.set(token, email);
-  res.json({ token, user: buildUserResponse(email) });
+  SESSIONS.set(token, accountId);
+  res.json({ token, user: buildUserResponse(accountId) });
 });
 
 app.post("/auth/register", (req, res) => {
-  const email = String(req.body.email || "").trim().toLowerCase();
+  const accountId = normalizeAccountId(req.body.email);
   const password = String(req.body.password || "");
   const code = String(req.body.code || "");
-  if (!LOGIN_EMAIL_RE.test(email)) return error(res, 400, "Enter a valid email address.");
+  if (!accountId) return error(res, 400, "Enter a username or email.");
   if (!password) return error(res, 400, "Enter a password.");
   if (!code) return error(res, 400, "Enter an access code.");
-  if (getUser(email)) return error(res, 400, "Account already exists. Log in instead.");
-  createUser(email, password, code);
+  if (getUser(accountId)) return error(res, 400, "Account already exists. Log in instead.");
+  createUser(accountId, password, code);
   const token = crypto.randomBytes(16).toString("hex");
-  SESSIONS.set(token, email);
-  res.json({ token, user: buildUserResponse(email) });
+  SESSIONS.set(token, accountId);
+  res.json({ token, user: buildUserResponse(accountId) });
 });
 
 app.get("/me", (req, res) => {
@@ -742,6 +742,12 @@ function verifySecret(secret, storedHash) {
   } catch {
     return false;
   }
+}
+
+function normalizeAccountId(value) {
+  const accountId = String(value || "").trim().toLowerCase();
+  if (!accountId || accountId.length > MAX_ACCOUNT_ID_LENGTH) return "";
+  return accountId;
 }
 
 function getUser(email) {
