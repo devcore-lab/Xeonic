@@ -1369,8 +1369,8 @@ input:focus, select:focus {
                     </div>
                     <div class="field-row" style="margin-top: 14px;">
                         <div class="field">
-                            <label>Email</label>
-                            <input id="email" type="email" value="demo@xeonic.dev" placeholder="you@example.com">
+                            <label>Username or email</label>
+                            <input id="email" type="text" value="demo@xeonic.dev" placeholder="username, email, or code name">
                         </div>
                         <div class="field">
                             <label>Password</label>
@@ -1755,7 +1755,7 @@ function renderUsage() {
             <div class="usage-card"><div class="usage-label">Upload limit</div><div class="usage-value">${formatBytes(GUEST_UPLOAD_BYTES)}</div></div>
             <div class="usage-card"><div class="usage-label">Response cap</div><div class="usage-value">${formatBytes(GUEST_UPLOAD_BYTES)}</div></div>
         `;
-        el.payments.innerHTML = `<div class="log-item">Guest mode includes 1 free clean. Sign up with any email and password for unlimited cleaning.</div>`;
+        el.payments.innerHTML = `<div class="log-item">Guest mode includes 1 free clean. Sign up with any username/email and password for unlimited cleaning.</div>`;
         el.planLimit.textContent = `${formatBytes(GUEST_UPLOAD_BYTES)} guest upload/response`;
         el.plansCurrentLimit.textContent = `Guest upload and response: ${formatBytes(GUEST_UPLOAD_BYTES)}`;
         return;
