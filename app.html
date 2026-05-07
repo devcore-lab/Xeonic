@@ -1227,6 +1227,344 @@ input:focus, select:focus {
     .insight-grid,
     .compare-grid { grid-template-columns: 1fr; }
 }
+
+/* Professional product polish */
+:root {
+    --app-bg: #f5f6f3;
+    --surface: #ffffff;
+    --surface-soft: #f7f8f5;
+    --ink: #121814;
+    --ink-soft: #59645e;
+    --hairline: #dfe5df;
+    --hairline-strong: #c8d3cb;
+    --teal: #08766d;
+    --teal-ink: #064b45;
+    --teal-soft: #e3f4f0;
+    --amber: #b8632a;
+    --amber-soft: #fff3e5;
+    --radius: 8px;
+    --app-shadow: 0 1px 2px rgba(18, 24, 20, 0.04), 0 18px 42px rgba(18, 24, 20, 0.07);
+}
+
+body {
+    background:
+        linear-gradient(180deg, #fbfbf8 0%, var(--app-bg) 38%, #eef3ef 100%);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.app-frame {
+    grid-template-columns: 264px minmax(0, 1fr);
+}
+
+.app-rail {
+    padding: 20px 16px;
+    background: #fcfdfa;
+    border-right-color: #d9e2dc;
+    box-shadow: 1px 0 0 rgba(255,255,255,0.8);
+}
+
+.rail-brand {
+    padding: 8px 8px 16px;
+}
+
+.brand-mark {
+    background: #111814;
+    box-shadow: none;
+    font-size: 15px;
+}
+
+.brand-word {
+    font-size: 16px;
+}
+
+.rail-nav {
+    gap: 8px;
+}
+
+.rail-link {
+    min-height: 42px;
+    padding: 10px 12px;
+    color: #5b665f;
+}
+
+.rail-link:hover {
+    background: #f3f6f2;
+    border-color: var(--hairline);
+}
+
+.rail-link.active {
+    color: var(--teal-ink);
+    background: #e8f5f2;
+    border-color: #c7e8df;
+}
+
+.mini-stat,
+.rail-account,
+.workspace-panel,
+.inspector-panel,
+.plan-card,
+.metric,
+.usage-card,
+.insight-card,
+.account-card,
+.drop-info div,
+.summary,
+.log-item {
+    border-color: var(--hairline);
+    background: var(--surface);
+}
+
+.mini-stat,
+.rail-account {
+    box-shadow: 0 1px 0 rgba(18, 24, 20, 0.03);
+}
+
+.mini-label,
+.meta-label,
+.field label,
+.drop-label,
+.compare-label,
+.metric-kicker,
+.usage-label {
+    letter-spacing: 0.06em;
+}
+
+.mini-value,
+.drop-value {
+    color: #18211c;
+}
+
+.topbar {
+    min-height: 76px;
+    padding: 18px 28px;
+    background: rgba(250, 251, 247, 0.92);
+}
+
+.topbar h1 {
+    font-size: 24px;
+}
+
+.topbar p {
+    max-width: 620px;
+}
+
+.workspace {
+    padding: 24px 28px 34px;
+}
+
+.clean-layout,
+.page-grid,
+.plans-page-panel {
+    max-width: 1240px;
+}
+
+.work-column,
+.inspector {
+    gap: 20px;
+}
+
+.workspace-panel,
+.inspector-panel {
+    padding: 20px;
+    box-shadow: var(--app-shadow);
+}
+
+.panel-heading {
+    font-size: 22px;
+}
+
+.panel-note {
+    max-width: 780px;
+}
+
+.bench-header,
+.panel-title-row,
+.preview-head,
+.auth-row {
+    align-items: center;
+}
+
+.pill-row {
+    justify-content: flex-end;
+}
+
+.soft-pill,
+.status-chip,
+.plan-pill,
+.result-chip {
+    background: #f7f8f5;
+    color: #425049;
+    border-color: #dce5df;
+}
+
+.status-chip,
+.soft-pill:first-child {
+    color: var(--teal-ink);
+    background: var(--teal-soft);
+    border-color: #c8e7df;
+}
+
+.dropzone {
+    padding: 22px;
+    border-color: #a9d8cf;
+    background:
+        linear-gradient(180deg, rgba(227, 244, 240, 0.56), rgba(255,255,255,0.94));
+}
+
+.drop-title {
+    font-size: 19px;
+}
+
+.drop-info {
+    grid-template-columns: minmax(0, 1.2fr) minmax(180px, 0.8fr);
+}
+
+.progress {
+    height: 7px;
+}
+
+.btn,
+.ghost-btn,
+.tab,
+.format-select,
+input,
+select {
+    border-radius: 8px;
+}
+
+.btn,
+.ghost-btn {
+    min-height: 42px;
+    padding: 10px 14px;
+}
+
+.btn {
+    background: #08766d;
+    border-color: #08766d;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.22) inset;
+}
+
+.btn:hover {
+    background: #06675f;
+}
+
+.ghost-btn {
+    background: #ffffff;
+}
+
+.ghost-btn:hover {
+    background: #f7f8f5;
+}
+
+.format-select,
+input,
+select {
+    background: #ffffff;
+    border-color: var(--hairline-strong);
+}
+
+.preview-workspace {
+    gap: 16px;
+}
+
+.tabs {
+    padding: 3px;
+    background: #f0f3ef;
+}
+
+.tab {
+    min-height: 34px;
+    padding: 7px 12px;
+}
+
+.tab.active {
+    background: #ffffff;
+    box-shadow: 0 1px 2px rgba(18, 24, 20, 0.08);
+}
+
+.compare-grid {
+    grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr);
+}
+
+.preview {
+    min-height: 390px;
+    background: #fcfdfb;
+    font-size: 13px;
+}
+
+.metric-grid {
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+}
+
+.usage-grid {
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+}
+
+.metric,
+.usage-card,
+.insight-card,
+.plan-card {
+    padding: 14px;
+}
+
+.metric-value,
+.usage-value,
+.plan-price {
+    font-size: 25px;
+    color: #121814;
+}
+
+.plan-card {
+    min-height: 210px;
+}
+
+.plans-page-panel .plan-grid {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.account-layout {
+    grid-template-columns: minmax(340px, 0.82fr) minmax(0, 1.18fr);
+}
+
+.modal {
+    z-index: 20;
+    backdrop-filter: blur(8px);
+}
+
+.modal-card {
+    background: #ffffff;
+}
+
+@media (max-width: 1180px) {
+    .app-frame { grid-template-columns: 88px minmax(0, 1fr); }
+}
+
+@media (max-width: 760px) {
+    .topbar,
+    .workspace {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+    .workspace-panel,
+    .inspector-panel {
+        padding: 16px;
+    }
+    .bench-header,
+    .panel-title-row,
+    .preview-head,
+    .auth-row {
+        align-items: flex-start;
+    }
+    .pill-row {
+        justify-content: flex-start;
+        margin-top: 12px;
+    }
+    .tabs {
+        margin-top: 12px;
+        overflow-x: auto;
+        width: 100%;
+    }
+}
 </style>
 </head>
 <body>
@@ -1270,8 +1608,8 @@ input:focus, select:focus {
     <main class="app-main">
         <header class="topbar">
             <div>
-                <h1>Xeonic cleaning studio</h1>
-                <p>Upload, normalize, inspect, and download cleaned data from one focused workspace.</p>
+                <h1>Xeonic workspace</h1>
+                <p>Clean, inspect, tokenize, and export AI-ready datasets from a single focused console.</p>
             </div>
             <div class="topbar-actions">
                 <button class="ghost-btn" id="browseBtn">Choose file</button>
@@ -1307,7 +1645,7 @@ input:focus, select:focus {
                         <div class="drop-head">
                             <div>
                                 <p class="drop-title" id="dropTitle">Drop files here or browse</p>
-                                <p class="muted micro">Supports batches of `.txt`, `.json`, `.epub`, `.md`, `.html`, `.csv`, and `.tsv`. Each file must fit your plan limit.</p>
+                                <p class="muted micro">Supports TXT, JSON, EPUB, MD, HTML, CSV, and TSV batches. Each file must fit your plan limit.</p>
                             </div>
                         </div>
                         <input type="file" id="fileInput" accept=".txt,.json,.epub,.md,.markdown,.html,.htm,.csv,.tsv" class="hidden" multiple>
